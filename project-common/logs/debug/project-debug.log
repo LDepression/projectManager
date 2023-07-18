@@ -1,0 +1,46 @@
+{"level":"INFO","time":"2023-07-15T21:33:48.877+0800","caller":"user/user.go:47","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-15T21:33:48.879+0800","caller":"user/user.go:48","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-15T21:33:48.879+0800","caller":"user/user.go:49","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-15T22:01:45.612+0800","caller":"user/user.go:47","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-15T22:01:45.612+0800","caller":"user/user.go:48","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-15T22:01:45.612+0800","caller":"user/user.go:49","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-15T22:03:28.706+0800","caller":"user/user.go:47","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-15T22:03:28.707+0800","caller":"user/user.go:48","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-15T22:03:28.707+0800","caller":"user/user.go:49","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-15T22:05:00.452+0800","caller":"user/user.go:47","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-15T22:05:00.453+0800","caller":"user/user.go:48","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-15T22:05:00.453+0800","caller":"user/user.go:49","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-17T11:09:04.752+0800","caller":"login.service.v1/login_service.go:46","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-17T11:09:04.753+0800","caller":"login.service.v1/login_service.go:47","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-17T11:09:04.753+0800","caller":"login.service.v1/login_service.go:48","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-17T11:21:01.323+0800","caller":"login.service.v1/login_service.go:46","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-17T11:21:01.324+0800","caller":"login.service.v1/login_service.go:47","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-17T11:21:01.324+0800","caller":"login.service.v1/login_service.go:48","msg":"短信平台调用成功,发送短信 error"}
+{"level":"INFO","time":"2023-07-17T11:23:15.595+0800","caller":"login.service.v1/login_service.go:46","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-17T11:23:15.595+0800","caller":"login.service.v1/login_service.go:47","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-17T11:23:15.595+0800","caller":"login.service.v1/login_service.go:48","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-07-17T16:19:11.506+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:14.512+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:17.524+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:20.539+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:23.550+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:26.560+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:29.574+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:32.587+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:35.588+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:38.591+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:41.606+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:44.615+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:47.621+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:50.636+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:52.901+0800","caller":"discovery/resolver.go:104","msg":"sync failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:53.647+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:56.657+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:19:59.668+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:02.684+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:05.695+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:08.699+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:11.704+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:14.711+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:17.716+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-17T16:20:20.731+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}

@@ -1,0 +1,53 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql8
+    image: mysql:8.0.20
+    restart: always
+    ports:
+      - 3309:3306
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: msproject
+    volumes:
+      - /root/golandProject/msproject-data/mysql/data:/var/lib/mysql
+      - /root/golandProject/msproject-data/mysql/conf:/etc/mysql/conf.d/
+      - /root/golandProject/msproject-data/mysql/logs:/logs
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+  Redis:
+    container_name: redis6
+    image: redis:6.2.7
+    restart: always
+    volumes:
+      - /root/golandProject/msproject-data/redis/data:/data
+      - /root/golandProject/msproject-data/redis/conf/redis.conf:/etc/redis/redis.conf
+    ports:
+      - 6379:6379
+    command: redis-server /etc/redis/redis.conf
+  Etcd:
+    container_name: etcd3
+    image: bitnami/etcd:3.5.6
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    privileged: true
+    volumes:
+      - /root/golandProject/msproject-data/etcd/data:/bitnami/etcd/data
+    ports:
+      - 2379:2379
+      - 2380:2380
+  Project-User:
+    container_name: project-user
+    image: project-user:latest
+    ports:
+      - 8080:8080
+      - 8881:8881

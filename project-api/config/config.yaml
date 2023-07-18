@@ -1,0 +1,14 @@
+server:
+  name: "project-api"
+  addr: "127.0.0.1:8080"
+zap:
+  debugFileName: "D:\\workspace\\go\\src\\projectManager\\project-common\\logs\\debug\\project-debug.log"
+  infoFileName: "D:\\workspace\\go\\src\\projectManager\\project-common\\logs\\info\\project-info.log"
+  warnFileName: "D:\\workspace\\go\\src\\projectManager\\project-common\\logs\\error\\project-error.log"
+  maxSize: 500,
+  maxAge: 28,
+  MaxBackups: 3
+etcd:
+  addrs:
+    - "127.0.0.1:2379"
+
