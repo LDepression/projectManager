@@ -30,4 +30,5 @@ func (u *RouterUser) Route(r *gin.Engine) {
 	InitRpcUserClient()
 	h := New()
 	r.POST("/project/login/getCaptcha", h.getCaptcha)
+	r.POST("/project/register", h.register)
 }

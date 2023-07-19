@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/gin-gonic/gin v1.9.1
+	github.com/jinzhu/copier v0.3.5
 	github.com/spf13/viper v1.14.0
 	google.golang.org/grpc v1.51.0
 )

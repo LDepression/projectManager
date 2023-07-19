@@ -15,11 +15,11 @@ import (
 	"log"
 	"projectManager/project-common/discovery"
 	"projectManager/project-common/logs"
+	"projectManager/project-grpc/user/login"
 	"projectManager/project-user/config"
-	loginServiceV1 "projectManager/project-user/pkg/service/login.service.v1"
 )
 
-var LoginServiceClient loginServiceV1.LoginServiceClient
+var LoginServiceClient login.LoginServiceClient
 
 func InitRpcUserClient() {
 	etcdRegister := discovery.NewResolver(config.C.EtcdConfig.Addrs, logs.LG)
@@ -29,5 +29,5 @@ func InitRpcUserClient() {
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
-	LoginServiceClient = loginServiceV1.NewLoginServiceClient(conn)
+	LoginServiceClient = login.NewLoginServiceClient(conn)
 }

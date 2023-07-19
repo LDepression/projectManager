@@ -2,4 +2,5 @@ use (
 	./project-api
 	./project-common
 	./project-user
+	./project-grpc
 )
