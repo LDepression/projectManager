@@ -21,5 +21,7 @@ var (
 	AccountExist   = errs.NewError(2004, "账号已经存在了")  //账号已经存在了
 	MobileExist    = errs.NewError(2005, "手机号已经存在了") //手机号已经存在了
 	ErrCaptcha     = errs.NewError(2006, "验证码不正确")   //验证码不存在或者过期
+	PwdError       = errs.NewError(2007, "密码不正确")    //密码不正确
+	NoLogin        = errs.NewError(2008, "未登录")      //密码不正确
 
 )

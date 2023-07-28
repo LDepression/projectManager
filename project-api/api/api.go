@@ -8,4 +8,7 @@
 
 package api
 
-import _ "projectManager/project-api/api/user"
+import (
+	_ "projectManager/project-api/api/project"
+	_ "projectManager/project-api/api/user"
+)

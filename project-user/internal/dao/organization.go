@@ -19,6 +19,12 @@ type OrganizationConn struct {
 	conn *gorms.GormConn
 }
 
+func (o *OrganizationConn) FindOrganizationsByMemID(ctx context.Context, id int64) ([]*organization.Organization, error) {
+	var orgs []*organization.Organization
+	err := o.conn.Session(ctx).Where("member_id = ?", id).Find(&orgs).Error
+	return orgs, err
+}
+
 func NewOrganizationDao() *OrganizationConn {
 	return &OrganizationConn{
 		conn: gorms.New(),

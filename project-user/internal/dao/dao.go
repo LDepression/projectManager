@@ -29,5 +29,6 @@ func (t *TransactionImpl) Action(f func(tx database.DbConn) error) error {
 		t.conn.Rollback()
 		return err
 	}
+	t.conn.Commit()
 	return nil
 }

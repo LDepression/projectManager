@@ -16,4 +16,5 @@ import (
 
 type Organization interface {
 	SaveOrganization(conn database.DbConn, ctx context.Context, org *organization.Organization) error
+	FindOrganizationsByMemID(ctx context.Context, id int64) ([]*organization.Organization, error)
 }

@@ -74,3 +74,33 @@ func (u *HandlerUser) register(c *gin.Context) {
 	//4.返回结果
 	c.JSON(http.StatusOK, result.Success(rsp))
 }
+
+func (u HandlerUser) Login(c *gin.Context) {
+	result := common.Result{}
+	var req user.LoginReq
+	if err := c.ShouldBind(&req); err != nil {
+		zap.S().Info(err)
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "参数格式错误"))
+		return
+	}
+	//2.调用业务逻辑
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	msg := &login.LoginMessage{}
+	if err := copier.Copy(msg, req); err != nil {
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "copy有误"))
+		return
+	}
+	loginRsp, err := LoginServiceClient.Login(ctx, msg)
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+		return
+	}
+	rsp := &user.LoginRsp{}
+	if err := copier.Copy(rsp, loginRsp); err != nil {
+		c.JSON(http.StatusOK, result.Fail(http.StatusBadRequest, "copy有误"))
+		return
+	}
+	c.JSON(http.StatusOK, result.Success(rsp))
+}

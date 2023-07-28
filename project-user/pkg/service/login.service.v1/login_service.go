@@ -12,13 +12,17 @@ import (
 	"context"
 	"errors"
 	"github.com/go-redis/redis/v8"
+	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
 	"log"
 	common "projectManager/project-common"
 	"projectManager/project-common/encrypts"
 	"projectManager/project-common/errs"
+	"projectManager/project-common/jwts"
 	"projectManager/project-common/logs"
+	"projectManager/project-common/tms"
 	"projectManager/project-grpc/user/login"
+	"projectManager/project-user/config"
 	"projectManager/project-user/internal/dao"
 	"projectManager/project-user/internal/data/member"
 	"projectManager/project-user/internal/data/organization"
@@ -26,6 +30,8 @@ import (
 	"projectManager/project-user/internal/database/tran"
 	"projectManager/project-user/internal/repo"
 	"projectManager/project-user/pkg/model"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -151,4 +157,85 @@ func (ls *LoginService) Register(ctx context.Context, req *login.RegisterMessage
 		return nil
 	})
 	return &login.RegisterResponse{}, err
+}
+
+func (ls LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*login.LoginResponse, error) {
+	//去数据库中查询
+	pwd := encrypts.Md5(msg.Password)
+	mem, err := ls.memberRepo.FindMember(ctx, msg.Account, pwd)
+	if err != nil {
+		return &login.LoginResponse{}, errs.GrpcError(model.PwdError)
+	}
+	if mem == nil {
+		return &login.LoginResponse{}, errs.GrpcError(model.PwdError)
+	}
+	memMsg := &login.MemberMessage{}
+	err = copier.Copy(memMsg, mem)
+	memMsg.Code, _ = encrypts.EncryptInt64(mem.Id, model.AESKEY)
+	memMsg.LastLoginTime = tms.FormatByMill(mem.LastLoginTime)
+	memMsg.CreateTime = tms.FormatByMill(mem.CreateTime)
+	//查询组织
+	orgs, err := ls.organizationRepo.FindOrganizationsByMemID(ctx, mem.Id)
+	if err != nil {
+		zap.L().Error("login db findMember error", zap.Error(err))
+		return &login.LoginResponse{}, errs.GrpcError(model.DBError)
+	}
+	var orgsMessage []*login.OrganizationMessage
+	err = copier.Copy(&orgsMessage, orgs)
+
+	for _, v := range orgsMessage {
+		v.Code, _ = encrypts.EncryptInt64(v.Id, model.AESKEY)
+		v.OwnerCode = memMsg.Code
+		o := organization.ToMap(orgs)[v.Id]
+		v.CreateTime = tms.FormatByMill(o.CreateTime)
+	}
+	if len(orgs) > 0 {
+		memMsg.OrganizationCode, _ = encrypts.EncryptInt64(orgs[0].Id, model.AESKEY)
+	}
+	//使用jwt生成token
+	memIdStr := strconv.FormatInt(mem.Id, 10)
+	exp := time.Duration(config.C.Jc.AccessExp*3600*24) * time.Second
+	rExp := time.Duration(config.C.Jc.RefreshExp*3600*24) * time.Second
+	token := jwts.CreateToken(memIdStr, exp, config.C.Jc.AccessSecret, rExp, config.C.Jc.RefreshSecret)
+	tokenList := &login.TokenMessage{
+		AccessToken:    token.AccessToken,
+		RefreshToken:   token.RefreshToken,
+		TokenType:      "bearer",
+		AccessTokenExp: token.AccessExp,
+	}
+	return &login.LoginResponse{
+		Member:           memMsg,
+		OrganizationList: orgsMessage,
+		TokenList:        tokenList,
+	}, nil
+}
+func (ls LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage) (*login.LoginResponse, error) {
+	token := msg.Token
+	if strings.Contains(token, "bearer") {
+		token = strings.ReplaceAll(token, "bearer ", "")
+	}
+	parseToken, err := jwts.ParseToken(token, config.C.Jc.AccessSecret)
+	if err != nil {
+		zap.L().Error("Login TokenVerify failed ", zap.Error(err))
+		return &login.LoginResponse{}, errs.GrpcError(model.NoLogin)
+	}
+	//数据库查询 优化点:登录之后 应该把用户信息缓存起来
+	id, _ := strconv.ParseInt(parseToken, 10, 64)
+	mem, err := ls.memberRepo.FindMemberByID(context.Background(), id)
+	if err != nil {
+		zap.L().Error("find member by id failed ", zap.Error(err))
+		return &login.LoginResponse{}, errs.GrpcError(model.DBError)
+	}
+	memMsg := &login.MemberMessage{}
+	err = copier.Copy(memMsg, mem)
+	memMsg.Code, _ = encrypts.EncryptInt64(mem.Id, model.AESKEY)
+	orgs, err := ls.organizationRepo.FindOrganizationsByMemID(context.Background(), mem.Id)
+	if err != nil {
+		zap.L().Error("TokenVerify db findMember error", zap.Error(err))
+		return &login.LoginResponse{}, errs.GrpcError(model.DBError)
+	}
+	if len(orgs) > 0 {
+		memMsg.OrganizationCode, _ = encrypts.EncryptInt64(orgs[0].Id, model.AESKEY)
+	}
+	return &login.LoginResponse{Member: memMsg}, nil
 }
