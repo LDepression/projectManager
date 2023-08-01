@@ -18,6 +18,7 @@ import (
 	"projectManager/project-common/logs"
 	"projectManager/project-grpc/project"
 	"projectManager/project-project/config"
+	"projectManager/project-project/internal/rpc"
 	project_service_v1 "projectManager/project-project/pkg/service/project.service.v1"
 )
 
@@ -91,4 +92,8 @@ func RegisterGrpc() *grpc.Server {
 		}
 	}()
 	return s
+}
+
+func InitUserRpc() {
+	rpc.InitRpcUserClient()
 }

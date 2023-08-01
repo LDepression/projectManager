@@ -35,7 +35,7 @@ func TokenVerify() func(c *gin.Context) {
 			return
 		}
 		//3. 处理结果
-		c.Set("memberID", rsp.Member.Id)
+		c.Set("memberId", rsp.Member.Id)
 		c.Set("memberName", rsp.Member.Name)
 		c.Set("organizationCode", rsp.Member.OrganizationCode)
 		c.Next()

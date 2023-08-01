@@ -15,6 +15,11 @@ import (
 	"projectManager/project-project/pkg/model"
 )
 
+/*
+Project
+提前定义好table_name方便于
+数据库做映射,也就是当手写sql语句的时候,调用scan方法时,方便于做映射
+*/
 type Project struct {
 	Id                 int64
 	Cover              string
@@ -24,7 +29,7 @@ type Project struct {
 	WhiteList          string
 	Sort               int
 	Deleted            int
-	TemplateCode       string
+	TemplateCode       int
 	Schedule           float64
 	CreateTime         int64
 	OrganizationCode   int64
@@ -64,8 +69,6 @@ type ProjectCollection struct {
 	ProjectCode int64
 	MemberCode  int64
 	CreateTime  int64
-	IsOwner     int64
-	Authorize   string
 }
 
 func (*ProjectCollection) TableName() string {
@@ -79,6 +82,7 @@ type ProjectMemberUnion struct {
 	JoinTime    int64
 	IsOwner     int64
 	Authorize   string
+	Collected   int
 }
 
 func (m *ProjectMemberUnion) GetAccessControlType() string {

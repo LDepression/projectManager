@@ -10,6 +10,7 @@ package login_service_v1
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/jinzhu/copier"
@@ -203,6 +204,14 @@ func (ls LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*log
 		TokenType:      "bearer",
 		AccessTokenExp: token.AccessExp,
 	}
+
+	//放入缓存中
+	go func() {
+		mar, _ := json.Marshal(mem)
+		ls.cache.Put(ctx, model.Member+memIdStr, string(mar), exp)
+		orgJson, _ := json.Marshal(orgs)
+		ls.cache.Put(ctx, model.MeberOrganization+memIdStr, string(orgJson), exp)
+	}()
 	return &login.LoginResponse{
 		Member:           memMsg,
 		OrganizationList: orgsMessage,
@@ -238,4 +247,24 @@ func (ls LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage)
 		memMsg.OrganizationCode, _ = encrypts.EncryptInt64(orgs[0].Id, model.AESKEY)
 	}
 	return &login.LoginResponse{Member: memMsg}, nil
+}
+func (ls *LoginService) FindMemInfoById(ctx context.Context, msg *login.UserMessage) (*login.MemberMessage, error) {
+	memberById, err := ls.memberRepo.FindMemberByID(context.Background(), msg.MemId)
+	if err != nil {
+		zap.L().Error("TokenVerify db FindMemberById error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	memMsg := &login.MemberMessage{}
+	copier.Copy(memMsg, memberById)
+	memMsg.Code, _ = encrypts.EncryptInt64(memberById.Id, model.AESKEY)
+	orgs, err := ls.organizationRepo.FindOrganizationsByMemID(context.Background(), memberById.Id)
+	if err != nil {
+		zap.L().Error("TokenVerify db FindMember error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	if len(orgs) > 0 {
+		memMsg.OrganizationCode, _ = encrypts.EncryptInt64(orgs[0].Id, model.AESKEY)
+	}
+	memMsg.CreateTime = tms.FormatByMill(memberById.CreateTime)
+	return memMsg, nil
 }

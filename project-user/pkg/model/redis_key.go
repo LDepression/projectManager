@@ -9,5 +9,7 @@
 package model
 
 var (
-	RegisterRedisKey string = "REGISTER_"
+	RegisterRedisKey  string = "REGISTER_"
+	Member                   = "MEMBER_"
+	MeberOrganization        = "MEBER_ORGANIZATION_"
 )

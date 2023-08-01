@@ -8,10 +8,36 @@
 
 package model
 
-var (
+const (
 	Normal   int   = 1
 	Personal int32 = 1
 )
-var (
+const (
 	AESKEY = "SDFOPOJKLHCNVBFHGJKLSDFH"
+)
+
+const (
+	NoDeleted = iota
+	Deleted
+)
+
+const (
+	NoArchive = iota
+	Archive
+)
+
+const (
+	Open = iota
+	Private
+	Custom
+)
+
+const (
+	Default = "default"
+	Simple  = "simple"
+)
+
+const (
+	NoCollected = iota
+	Collected
 )

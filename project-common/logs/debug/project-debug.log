@@ -1,0 +1,15 @@
+{"level":"ERROR","time":"2023-07-28T22:46:54.554+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-07-28T22:46:55.672+0800","caller":"discovery/resolver.go:104","msg":"sync failed","error":"context deadline exceeded"}
+{"level":"INFO","time":"2023-07-31T17:21:33.987+0800","caller":"login.service.v1/login_service.go:68","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-07-31T17:21:33.992+0800","caller":"login.service.v1/login_service.go:69","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-07-31T17:21:33.993+0800","caller":"login.service.v1/login_service.go:70","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-07-31T17:30:24.891+0800","caller":"project.service.v1/project_service.go:216","msg":"project rpc FindProjectDetail FindMemInfoById error","error":"rpc error: code = Unimplemented desc = method FindMemInfoById not implemented"}
+{"level":"ERROR","time":"2023-07-31T17:34:55.840+0800","caller":"project.service.v1/project_service.go:216","msg":"project rpc FindProjectDetail FindMemInfoById error","error":"rpc error: code = Unimplemented desc = method FindMemInfoById not implemented"}
+{"level":"ERROR","time":"2023-07-31T17:38:46.065+0800","caller":"project.service.v1/project_service.go:223","msg":"project FindProjectDetail FindCollectByPidAndMemId error","error":"Error 1146 (42S02): Table 'ms_project.ms_project_collection' doesn't exist"}
+{"level":"INFO","time":"2023-08-01T15:17:35.063+0800","caller":"login.service.v1/login_service.go:68","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"DEBUG","time":"2023-08-01T15:17:35.064+0800","caller":"login.service.v1/login_service.go:69","msg":"短信平台调用成功,发送短信 debug"}
+{"level":"ERROR","time":"2023-08-01T15:17:35.065+0800","caller":"login.service.v1/login_service.go:70","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-08-01T15:40:56.341+0800","caller":"project.service.v1/project_collect.go:39","msg":"project UpdateCollectProject SaveProjectCollect error","error":"Error 1054 (42S22): Unknown column 'is_owner' in 'field list'"}
+{"level":"ERROR","time":"2023-08-01T15:51:31.025+0800","caller":"login.service.v1/login_service.go:219","msg":"Login TokenVerify failed ","error":"Token is expired"}
+{"level":"ERROR","time":"2023-08-01T16:24:05.296+0800","caller":"project.service.v1/project_service.go:103","msg":"project FindProjectByMemId error ","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-08-01T16:24:05.303+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"etcdserver: requested lease not found"}

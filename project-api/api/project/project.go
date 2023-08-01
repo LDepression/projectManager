@@ -50,7 +50,7 @@ func (p *HandlerProject) myProjectList(c *gin.Context) {
 	//1.获取参数
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	memberID := c.GetInt64("memberID")
+	memberID := c.GetInt64("memberId")
 	memberName := c.GetString("memberName")
 	page := &model.Page{}
 	page.Bind(c)
@@ -118,4 +118,105 @@ func (p *HandlerProject) projectTemplate(c *gin.Context) {
 		"list":  pms, //null nil -> []
 		"total": templateResponse.Total,
 	}))
+}
+
+func (p *HandlerProject) projectSave(c *gin.Context) {
+	result := &common.Result{}
+	//1. 获取参数
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	memberId := c.GetInt64("memberId")
+	organizationCode := c.GetString("organizationCode")
+	var req *pro.SaveProjectRequest
+	c.ShouldBind(&req)
+	msg := &project.ProjectRpcMessage{
+		MemberId:         memberId,
+		OrganizationCode: organizationCode,
+		TemplateCode:     req.TemplateCode,
+		Name:             req.Name,
+		Id:               int64(req.Id),
+		Description:      req.Description,
+	}
+	saveProject, err := ProjectServiceClient.SaveProject(ctx, msg)
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	var rsp *pro.SaveProject
+	copier.Copy(&rsp, saveProject)
+	c.JSON(http.StatusOK, result.Success(rsp))
+}
+
+func (p *HandlerProject) readProject(c *gin.Context) {
+	result := &common.Result{}
+	projectCode := c.PostForm("projectCode")
+	memberId := c.GetInt64("memberId")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	detail, err := ProjectServiceClient.FindProjectDetail(ctx, &project.ProjectRpcMessage{ProjectCode: projectCode, MemberId: memberId})
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	pd := &pro.ProjectDetail{}
+	copier.Copy(pd, detail)
+	c.JSON(http.StatusOK, result.Success(pd))
+}
+func (p *HandlerProject) recycleProject(c *gin.Context) {
+	result := &common.Result{}
+	projectCode := c.PostForm("projectCode")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectServiceClient.UpdateDeletedProject(ctx, &project.ProjectRpcMessage{ProjectCode: projectCode, Deleted: true})
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+func (p *HandlerProject) recoveryProject(c *gin.Context) {
+	result := &common.Result{}
+	projectCode := c.PostForm("projectCode")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectServiceClient.UpdateDeletedProject(ctx, &project.ProjectRpcMessage{ProjectCode: projectCode, Deleted: false})
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+
+func (p *HandlerProject) collectProject(c *gin.Context) {
+
+	result := &common.Result{}
+	projectCode := c.PostForm("projectCode")
+	collectType := c.PostForm("type")
+	memberId := c.GetInt64("memberId")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	_, err := ProjectServiceClient.UpdateCollectProject(ctx, &project.ProjectRpcMessage{ProjectCode: projectCode, CollectType: collectType, MemberId: memberId})
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	c.JSON(http.StatusOK, result.Success([]int{}))
+}
+
+func (p *HandlerProject) editProject(c *gin.Context) {
+	result := &common.Result{}
+	var req *pro.ProjectReq
+	_ = c.ShouldBind(&req)
+	memberId := c.GetInt64("memberId")
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+	msg := &project.UpdateProjectMessage{}
+	copier.Copy(msg, req)
+	msg.MemberId = memberId
+	_, err := ProjectServiceClient.UpdateProject(ctx, msg)
+	if err != nil {
+		code, msg := errs.HandleGrpcError(err)
+		c.JSON(http.StatusOK, result.Fail(code, msg))
+	}
+	c.JSON(http.StatusOK, result.Success([]int{}))
 }
