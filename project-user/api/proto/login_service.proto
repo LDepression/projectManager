@@ -69,8 +69,12 @@ message TokenMessage{
   int64 accessTokenExp = 4;
 }
 
+message MemberMessageList {
+  repeated MemberMessage list = 1;
+}
 message UserMessage{
   int64 memId = 1;
+  repeated int64  memIDs = 2;
 }
 service LoginService {
   rpc GetCaptcha(CaptchaMessage) returns (CaptchaResponse) {}
@@ -78,5 +82,6 @@ service LoginService {
   rpc Login(LoginMessage) returns (LoginResponse) {}
   rpc TokenVerify(LoginMessage) returns (LoginResponse) {}
   rpc FindMemInfoById(UserMessage) returns (MemberMessage) {}
+  rpc FindMemInfoByIds(UserMessage) returns (MemberMessageList) {}
 }
 

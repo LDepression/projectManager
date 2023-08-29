@@ -18,6 +18,7 @@ import (
 	"projectManager/project-common/logs"
 	"projectManager/project-grpc/user/login"
 	"projectManager/project-user/config"
+	"projectManager/project-user/internal/interceptor"
 	loginServiceV1 "projectManager/project-user/pkg/service/login.service.v1"
 )
 
@@ -77,7 +78,9 @@ func RegisterGrpc() *grpc.Server {
 			login.RegisterLoginServiceServer(g, loginServiceV1.New())
 		},
 	}
-	s := grpc.NewServer()
+	//添加拦截器
+	in := interceptor.New()
+	s := grpc.NewServer(in.Cache())
 	c.RegisterFunc(s)
 
 	lis, err := net.Listen("tcp", config.C.GC.Addr)

@@ -16,10 +16,12 @@ import (
 	"projectManager/project-common/discovery"
 	"projectManager/project-common/logs"
 	"projectManager/project-grpc/project"
+	task "projectManager/project-grpc/task"
 	"projectManager/project-user/config"
 )
 
 var ProjectServiceClient project.ProjectServiceClient
+var TaskServiceClient task.TaskServiceClient
 
 func InitRpcProjectClient() {
 	etcdRegister := discovery.NewResolver(config.C.EtcdConfig.Addrs, logs.LG)
@@ -30,4 +32,5 @@ func InitRpcProjectClient() {
 		log.Fatalf("did not connect: %v", err)
 	}
 	ProjectServiceClient = project.NewProjectServiceClient(conn)
+	TaskServiceClient = task.NewTaskServiceClient(conn)
 }

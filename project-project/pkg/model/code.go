@@ -23,4 +23,7 @@ var (
 	ErrCaptcha     = errs.NewError(2006, "验证码不正确")   //验证码不存在或者过期
 	PwdError       = errs.NewError(2007, "密码不正确")    //密码不正确
 
+	TaskNameNotNull       = errs.NewError(20102001, "任务标题不能为空")
+	TaskStagesNotNull     = errs.NewError(20102002, "任务步骤不存在")
+	ProjectAlreadyDeleted = errs.NewError(20102003, "项目已经删除了")
 )

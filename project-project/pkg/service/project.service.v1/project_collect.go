@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 	"projectManager/project-common/errs"
 	"projectManager/project-grpc/project"
-	"projectManager/project-project/internal/data/pro"
+	"projectManager/project-project/internal/data"
 	"projectManager/project-project/pkg/model"
 	"strconv"
 	"time"
@@ -25,7 +25,7 @@ func (ps *ProjectService) UpdateCollectProject(ctx context.Context, msg *project
 	defer cancel()
 	var err error
 	if "collect" == msg.CollectType {
-		pc := &pro.ProjectCollection{
+		pc := &data.ProjectCollection{
 			ProjectCode: projectCode,
 			MemberCode:  msg.MemberId,
 			CreateTime:  time.Now().UnixMilli(),

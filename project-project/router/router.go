@@ -17,9 +17,12 @@ import (
 	"projectManager/project-common/discovery"
 	"projectManager/project-common/logs"
 	"projectManager/project-grpc/project"
+	"projectManager/project-grpc/task"
 	"projectManager/project-project/config"
+	"projectManager/project-project/internal/interceptor"
 	"projectManager/project-project/internal/rpc"
 	project_service_v1 "projectManager/project-project/pkg/service/project.service.v1"
+	task_service_v1 "projectManager/project-project/pkg/service/task.service.v1"
 )
 
 // 接口
@@ -76,9 +79,10 @@ func RegisterGrpc() *grpc.Server {
 		Addr: config.C.GC.Addr,
 		RegisterFunc: func(g *grpc.Server) {
 			project.RegisterProjectServiceServer(g, project_service_v1.New())
+			task.RegisterTaskServiceServer(g, task_service_v1.New())
 		},
 	}
-	s := grpc.NewServer()
+	s := grpc.NewServer(interceptor.New().Cache())
 	c.RegisterFunc(s)
 
 	lis, err := net.Listen("tcp", config.C.GC.Addr)

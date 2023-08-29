@@ -206,12 +206,10 @@ func (ls LoginService) Login(ctx context.Context, msg *login.LoginMessage) (*log
 	}
 
 	//放入缓存中
-	go func() {
-		mar, _ := json.Marshal(mem)
-		ls.cache.Put(ctx, model.Member+memIdStr, string(mar), exp)
-		orgJson, _ := json.Marshal(orgs)
-		ls.cache.Put(ctx, model.MeberOrganization+memIdStr, string(orgJson), exp)
-	}()
+	mar, _ := json.Marshal(mem)
+	ls.cache.Put(ctx, model.Member+memIdStr, string(mar), exp)
+	orgJson, _ := json.Marshal(orgs)
+	ls.cache.Put(ctx, model.MeberOrganization+memIdStr, string(orgJson), exp)
 	return &login.LoginResponse{
 		Member:           memMsg,
 		OrganizationList: orgsMessage,
@@ -229,20 +227,34 @@ func (ls LoginService) TokenVerify(ctx context.Context, msg *login.LoginMessage)
 		return &login.LoginResponse{}, errs.GrpcError(model.NoLogin)
 	}
 	//数据库查询 优化点:登录之后 应该把用户信息缓存起来
-	id, _ := strconv.ParseInt(parseToken, 10, 64)
-	mem, err := ls.memberRepo.FindMemberByID(context.Background(), id)
+	//从缓存中查询 如果没有 直接返回认证失败
+	memJson, err := ls.cache.Get(context.Background(), model.Member+parseToken)
 	if err != nil {
-		zap.L().Error("find member by id failed ", zap.Error(err))
-		return &login.LoginResponse{}, errs.GrpcError(model.DBError)
+		zap.L().Error("TokenVerify cache get member error", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
 	}
+	if memJson == "" {
+		zap.L().Error("TokenVerify cache get member expire")
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	memberById := &member.Member{}
+	json.Unmarshal([]byte(memJson), memberById)
+	//数据库查询 优化点 登录之后 应该把用户信息缓存起来
 	memMsg := &login.MemberMessage{}
-	err = copier.Copy(memMsg, mem)
-	memMsg.Code, _ = encrypts.EncryptInt64(mem.Id, model.AESKEY)
-	orgs, err := ls.organizationRepo.FindOrganizationsByMemID(context.Background(), mem.Id)
+	copier.Copy(memMsg, memberById)
+	memMsg.Code, _ = encrypts.EncryptInt64(memberById.Id, model.AESKEY)
+
+	orgsJson, err := ls.cache.Get(context.Background(), model.MeberOrganization+parseToken)
 	if err != nil {
-		zap.L().Error("TokenVerify db findMember error", zap.Error(err))
-		return &login.LoginResponse{}, errs.GrpcError(model.DBError)
+		zap.L().Error("TokenVerify cache get organization error", zap.Error(err))
+		return nil, errs.GrpcError(model.NoLogin)
 	}
+	if orgsJson == "" {
+		zap.L().Error("TokenVerify cache get organization expire")
+		return nil, errs.GrpcError(model.NoLogin)
+	}
+	var orgs []*organization.Organization
+	json.Unmarshal([]byte(orgsJson), &orgs)
 	if len(orgs) > 0 {
 		memMsg.OrganizationCode, _ = encrypts.EncryptInt64(orgs[0].Id, model.AESKEY)
 	}
@@ -267,4 +279,27 @@ func (ls *LoginService) FindMemInfoById(ctx context.Context, msg *login.UserMess
 	}
 	memMsg.CreateTime = tms.FormatByMill(memberById.CreateTime)
 	return memMsg, nil
+}
+func (ls *LoginService) FindMemInfoByIds(ctx context.Context, msg *login.UserMessage) (*login.MemberMessageList, error) {
+	memberList, err := ls.memberRepo.FindMemberByIds(context.Background(), msg.MemIDs)
+	if err != nil {
+		zap.L().Error("FindMemInfoByIds db memberRepo.FindMemberByIds error", zap.Error(err))
+		return nil, errs.GrpcError(model.DBError)
+	}
+	if memberList == nil || len(memberList) <= 0 {
+		return &login.MemberMessageList{List: nil}, nil
+	}
+	mMap := make(map[int64]*member.Member)
+	for _, v := range memberList {
+		mMap[v.Id] = v
+	}
+	var memMsgs []*login.MemberMessage
+	copier.Copy(&memMsgs, memberList)
+	for _, v := range memMsgs {
+		m := mMap[v.Id]
+		v.CreateTime = tms.FormatByMill(m.CreateTime)
+		v.Code = encrypts.EncryptNoErr(v.Id)
+	}
+
+	return &login.MemberMessageList{List: memMsgs}, nil
 }

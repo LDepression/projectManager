@@ -9,12 +9,11 @@
 package model
 
 const (
-	Normal   int   = 1
+	Normal         = 1
 	Personal int32 = 1
 )
-const (
-	AESKEY = "SDFOPOJKLHCNVBFHGJKLSDFH"
-)
+
+const AESKey = "sdfgyrhgbxcdgryfhgywertd"
 
 const (
 	NoDeleted = iota
@@ -40,4 +39,23 @@ const (
 const (
 	NoCollected = iota
 	Collected
+)
+
+const (
+	NoOwner = iota
+	Owner
+)
+
+const (
+	NoExecutor = iota
+	Executor
+)
+const (
+	NoCanRead = iota
+	CanRead
+)
+
+const (
+	UnDone = iota
+	Done
 )

@@ -11,3 +11,17 @@
 {"level":"ERROR","time":"2023-08-01T15:51:31.025+0800","caller":"login.service.v1/login_service.go:219","msg":"Login TokenVerify failed ","error":"Token is expired"}
 {"level":"ERROR","time":"2023-08-01T16:24:05.296+0800","caller":"project.service.v1/project_service.go:103","msg":"project FindProjectByMemId error ","error":"context deadline exceeded"}
 {"level":"ERROR","time":"2023-08-01T16:24:05.303+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"etcdserver: requested lease not found"}
+{"level":"INFO","time":"2023-08-02T14:54:14.976+0800","caller":"login.service.v1/login_service.go:69","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"ERROR","time":"2023-08-02T14:54:14.979+0800","caller":"login.service.v1/login_service.go:71","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-08-02T16:21:10.768+0800","caller":"login.service.v1/login_service.go:233","msg":"TokenVerify cache get member error","error":"redis: nil"}
+{"level":"ERROR","time":"2023-08-02T16:21:40.563+0800","caller":"login.service.v1/login_service.go:233","msg":"TokenVerify cache get member error","error":"redis: nil"}
+{"level":"INFO","time":"2023-08-02T16:34:01.919+0800","caller":"interceptor/cache.go:55","msg":"/project.ProjectService/FindProjectByMemId 放入缓存"}
+{"level":"ERROR","time":"2023-08-17T15:35:46.027+0800","caller":"login.service.v1/login_service.go:226","msg":"Login TokenVerify failed ","error":"Token is expired"}
+{"level":"INFO","time":"2023-08-17T15:35:54.018+0800","caller":"login.service.v1/login_service.go:69","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"ERROR","time":"2023-08-17T15:35:54.019+0800","caller":"login.service.v1/login_service.go:71","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-08-17T15:46:49.628+0800","caller":"discovery/discovery.go:117","msg":"register failed","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-08-17T15:46:49.629+0800","caller":"project.service.v1/project_service.go:174","msg":"project SaveProject taskStagesTemplateRepo.FindByProjectTemplateId error","error":"context deadline exceeded"}
+{"level":"INFO","time":"2023-08-22T22:14:32.850+0800","caller":"login.service.v1/login_service.go:69","msg":"短信平台调用成功,发送短信 INFO"}
+{"level":"ERROR","time":"2023-08-22T22:14:32.851+0800","caller":"login.service.v1/login_service.go:71","msg":"短信平台调用成功,发送短信 error"}
+{"level":"ERROR","time":"2023-08-22T22:28:53.051+0800","caller":"task.service.v1/task_service.go:87","msg":"project MemberProjectList projectRepo.FindProjectMemberByPid error","error":"context deadline exceeded"}
+{"level":"ERROR","time":"2023-08-22T22:29:46.940+0800","caller":"task.service.v1/task_service.go:87","msg":"project MemberProjectList projectRepo.FindProjectMemberByPid error","error":"context deadline exceeded"}

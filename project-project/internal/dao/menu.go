@@ -18,7 +18,7 @@ type MenuDao struct {
 	conn *gorms.GormConn
 }
 
-func NewMenuRepo() *MenuDao {
+func NewMenuDao() *MenuDao {
 	return &MenuDao{conn: gorms.New()}
 }
 func (m MenuDao) FindMenus(ctx context.Context) (pms []*menu.ProjectMenu, err error) {
